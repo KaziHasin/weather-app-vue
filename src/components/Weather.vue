@@ -1,5 +1,5 @@
 <template>
-  <div class="weater-box shadow-2xl flex justify-center rounded-lg">
+  <div class="weather-box shadow-2xl flex justify-center rounded-lg">
     <div
       class="weater flex items-center justify-center font-extrabold md:text-9xl text-6xl"
     >
@@ -16,7 +16,7 @@
 </script>
 
 <style scoped>
-.weater-box {
+.weather-box {
   width: 50%;
   height: 200px;
   background: rgba(118, 131, 148, 0.8);
@@ -24,7 +24,7 @@
 }
 
 @media(max-width: 768px) {
-  .weater-box {
+  .weather-box {
   height: 120px;
     
   }

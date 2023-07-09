@@ -4,6 +4,7 @@
     <AreaDateTime :address="address" :formattedDate="formattedDate" />
     <Weather :temperature="temperature" />
     <WeatherIcon :icon="icon" :text="text" />
+    <Forecast :humidity="humidity" :forecast="forecastData"/>
   </div>
 </template>
 
@@ -12,10 +13,11 @@ import SearchBar from "./SearchBar.vue";
 import AreaDateTime from "./AreaDateTime.vue";
 import Weather from "./Weather.vue";
 import WeatherIcon from "./WeatherIcon.vue";
+import Forecast from "./Forecast.vue";
 import axios from "axios";
 
 export default {
-  components: { SearchBar, AreaDateTime, Weather, WeatherIcon },
+  components: { SearchBar, AreaDateTime, Weather, WeatherIcon, Forecast},
   data() {
     return {
       temperature: null,
@@ -23,6 +25,8 @@ export default {
       text: null,
       address: null,
       date: null,
+      humidity: null,
+      forecastData: []
     };
   },
   computed: {
@@ -71,13 +75,17 @@ export default {
           },
         })
         .then((response) => {
+          
           this.temperature = response.data.current.temp_c;
           this.icon = response.data.current.condition.icon;
           this.text = response.data.current.condition.text;
-
+          this.humidity = response.data.current.humidity;
+          this.forecastData = response.data.forecast.forecastday;
+            console.log(this.forecastData[0]);
+          
           this.address =
             response.data.location.name + ", " + response.data.location.country;
-          this.date = response.data.location.localtime;
+            this.date = response.data.location.localtime;
         })
         .catch(function (error) {
           console.log(error);
