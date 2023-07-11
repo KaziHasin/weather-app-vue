@@ -2,7 +2,7 @@
 # Weather App Vue
 
 a cool weather app that displays current conditions in your location. In addition, it shows the forecast for the next three days. Also Your city and country names.
-When your open this app on browser it asks for permission to get your location. If you deny then you cannot get the weather of your current location when your first time open the app.
+When you open this app on your browser, it asks for permission to get your location. If you deny then you cannot get the weather of your current location when your first time open the app.
 I used  navigator.geolocation.getCurrentPosition of javascirpt and Geocoding API from https://opencagedata.com/ for fetching user's current city. 
 
 See the app 
