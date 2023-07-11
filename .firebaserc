@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "my-vue-app-69e3a"
-  }
+    "default": "my-vue-app-69e3a",
+    "vue app": "my-vue-app-69e3a"
+  },
+  "targets": {},
+  "etags": {}
 }

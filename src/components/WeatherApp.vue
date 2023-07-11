@@ -1,10 +1,12 @@
 <template>
   <div class="container-fluid">
     <SearchBar @city-searched="fetchWeather" />
-    <AreaDateTime :address="address" :formattedDate="formattedDate" />
+    <AreaDateTime :address="address" :formattedDate="formattedDate" :formattedTime="formattedTime"/>
     <Weather :temperature="temperature" />
     <WeatherIcon :icon="icon" :text="text" />
-    <Forecast :humidity="humidity" :forecast="forecastData"/>
+    <Forecast :humidity="humidity" :forecast="forecastData" />
+    <HourlyForecast :forecast="forecastHourly" />
+
   </div>
 </template>
 
@@ -14,10 +16,12 @@ import AreaDateTime from "./AreaDateTime.vue";
 import Weather from "./Weather.vue";
 import WeatherIcon from "./WeatherIcon.vue";
 import Forecast from "./Forecast.vue";
+import HourlyForecast from "./HourlyForecast.vue";
+
 import axios from "axios";
 
 export default {
-  components: { SearchBar, AreaDateTime, Weather, WeatherIcon, Forecast},
+  components: { SearchBar, AreaDateTime, Weather, WeatherIcon, Forecast, HourlyForecast },
   data() {
     return {
       temperature: null,
@@ -26,7 +30,8 @@ export default {
       address: null,
       date: null,
       humidity: null,
-      forecastData: []
+      forecastData: [],
+      forecastHourly: [],
     };
   },
   computed: {
@@ -59,9 +64,26 @@ export default {
       }
       return "";
     },
+
+    formattedTime() {
+      if (this.date) {
+        const dateString = this.date;
+        const dateTime = new Date(dateString);
+
+        const options = {
+          hour12: true, 
+          hour: "numeric",
+          minute: "numeric", 
+        };
+
+        const time = dateTime.toLocaleTimeString("en-US", options);
+        return time;
+      }
+    },
   },
   methods: {
     fetchWeather(city) {
+      
       axios
         .get("https://weatherapi-com.p.rapidapi.com/forecast.json", {
           params: {
@@ -70,7 +92,7 @@ export default {
           },
           headers: {
             "X-RapidAPI-Key":
-              "0a295a27f1msh10a3576bb9e7b92p12f60cjsneca0a590c6f0",
+            import.meta.env.VITE_WEATHER_API_KEY,
             "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com",
           },
         })
@@ -81,11 +103,13 @@ export default {
           this.text = response.data.current.condition.text;
           this.humidity = response.data.current.humidity;
           this.forecastData = response.data.forecast.forecastday;
-            console.log(this.forecastData[0]);
+          this.forecastHourly = response.data.forecast.forecastday[0].hour;
           
+          // console.log(this.forecastHourly);
+
           this.address =
             response.data.location.name + ", " + response.data.location.country;
-            this.date = response.data.location.localtime;
+          this.date = response.data.location.localtime;
         })
         .catch(function (error) {
           console.log(error);
@@ -97,36 +121,34 @@ export default {
           (position) => {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-          
+
             this.fetchUserCity(latitude, longitude);
           },
           (error) => {
-            
             console.error(error.message);
           }
         );
       } else {
-        
         console.error("Geolocation is not supported");
       }
     },
     fetchUserCity(latitude, longitude) {
-      const apiKey = "4019f8ee994242c5b70eec3a219c3f15";
-        
+      const apiKey = import.meta.env.VITE_OPENCAGE_API_KEY;
+
       axios
-        .get(`https://api.opencagedata.com/geocode/v1/json?q=${latitude} ${longitude}&key=${apiKey}`)
+        .get(
+          `https://api.opencagedata.com/geocode/v1/json?q=${latitude} ${longitude}&key=${apiKey}`
+        )
         .then((response) => {
-         const city = response.data.results[0].components.city;
-         this.fetchWeather(city);
+          const city = response.data.results[0].components.city;
+          this.fetchWeather(city);
         })
         .catch(function (error) {
           console.log(error);
         });
-    }
-
+    },
   },
   created() {
-  
     this.fetchUserLocation();
   },
 };

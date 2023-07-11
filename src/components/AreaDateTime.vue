@@ -12,6 +12,11 @@
                     {{formattedDate}}
                 </span>
             </div>
+            <div class="time">
+              <span>
+                {{formattedTime}}
+              </span>
+            </div>
 
        </div>
 
@@ -19,7 +24,7 @@
 
 <script>
   export default {
-    props : ['address', 'formattedDate']
+    props : ['address', 'formattedDate', 'formattedTime']
   }
 </script>
 

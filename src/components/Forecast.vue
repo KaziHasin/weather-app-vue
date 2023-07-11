@@ -1,4 +1,5 @@
 <template>
+   <h4 class="heading">Daily</h4>
   <div class="box flex justify-between rounded-lg px-2 items-center md:px-6">
     <div class="humidity flex items-center text-xl border-r-2 border-white">
       <Icon icon="carbon:humidity" class="text-xl md:text-2xl "/>
@@ -11,7 +12,7 @@
 
     <div class="forecast-box flex justify-between text-xl">
       <div v-for="day in forecast" :key="day.date" class="forecast flex flex-col justify-center items-center">
-        <div class="date mb-4 text-lg">{{getDayOfWeek(day.date)}}</div>
+        <div class="date mb-2 text-lg">{{getDayOfWeek(day.date)}}</div>
         <div class="icon"><img :src="day.day.condition.icon" alt="" class="w-16 h-16"></div>
         <div class="weather text-center text-sm">{{ day.day.avgtemp_c }} <sup>o</sup></div>
       </div>
@@ -39,13 +40,17 @@ const getDayOfWeek = (date) => {
 </script>
 
 <style scoped>
+.heading {
+    width: 90%;
+    margin:50px auto 0;
+  }
 .box {
   position: relative;
   width: 90%;
   min-height: 200px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25),
               0 -15px 35px rgba(0, 0, 0, 0.25);
-  margin: 50px auto;
+  margin: 5px auto 50px;
 }
 .forecast-box {
   flex: .7;
